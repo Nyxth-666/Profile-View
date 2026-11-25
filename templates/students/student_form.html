@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}{% if student %}Edit{% else %}Add{% endif %} Student{% endblock %}
+{% block content %}
+<h1 class="mb-4 font-serif text-3xl font-bold">{% if student %}Edit Student{% else %}Add Student{% endif %}</h1>
+
+<form method="post" enctype="multipart/form-data" class="space-y-4" novalidate>
+  {% csrf_token %}
+
+  <section class="rounded-xl border border-line bg-white/60 p-5">
+    <h2 class="mb-4 font-serif text-xl font-bold">Personal &amp; Enrollment Information</h2>
+    <div class="grid gap-4 sm:grid-cols-2">
+      {% for field in form %}{% include 'students/_form_field.html' %}{% endfor %}
+    </div>
+  </section>
+
+  <section class="rounded-xl border border-line bg-white/60 p-5">
+    <h2 class="mb-4 font-serif text-xl font-bold">Background Information</h2>
+    <div class="grid gap-4 sm:grid-cols-2">
+      {% for field in background_form %}{% include 'students/_form_field.html' %}{% endfor %}
+    </div>
+  </section>
+
+  <section class="rounded-xl border border-line bg-white/60 p-5">
+    <h2 class="mb-4 font-serif text-xl font-bold">Guardian Information</h2>
+    <div class="grid gap-4 sm:grid-cols-2">
+      {% for field in guardian_form %}{% include 'students/_form_field.html' %}{% endfor %}
+    </div>
+  </section>
+
+  <div class="flex gap-3">
+    <button type="submit" class="rounded-lg bg-navy px-6 py-2.5 text-sm font-medium text-white transition hover:opacity-90">Save Student</button>
+    <a href="{% if student %}{% url 'students:detail' student.pk %}{% else %}{% url 'students:list' %}{% endif %}"
+       class="rounded-lg border border-line bg-white/60 px-6 py-2.5 text-sm transition hover:bg-white">Cancel</a>
+  </div>
+</form>
+{% endblock %}

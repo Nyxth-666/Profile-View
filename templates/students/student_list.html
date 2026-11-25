@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}Students{% endblock %}
+{% block content %}
+<div class="mb-4 flex items-center justify-between">
+  <h1 class="font-serif text-3xl font-bold">Students</h1>
+  <a href="{% url 'students:add' %}"
+     class="rounded-lg bg-navy px-5 py-2.5 text-sm font-medium text-white transition hover:opacity-90">
+    + Add Student
+  </a>
+</div>
+
+<div class="overflow-x-auto rounded-xl border border-line bg-white/60">
+  <table class="w-full text-left text-sm">
+    <thead class="bg-line/40 text-muted">
+      <tr>
+        <th class="px-4 py-3 font-semibold">Student ID</th>
+        <th class="px-4 py-3 font-semibold">Name</th>
+        <th class="px-4 py-3 font-semibold">Course</th>
+        <th class="px-4 py-3 font-semibold">Year</th>
+        <th class="px-4 py-3 font-semibold">Status</th>
+        <th class="px-4 py-3 font-semibold">Actions</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-line">
+      {% for s in students %}
+      <tr class="hover:bg-white">
+        <td class="px-4 py-3">{{ s.student_id }}</td>
+        <td class="px-4 py-3">
+          <a
+            href="{% url 'students:detail' s.pk %}"
+            class="font-medium text-navy hover:underline"
+            >{{ s.last_name }}, {{ s.first_name }}</a
+          >
+        </td>
+        <td class="px-4 py-3">{{ s.course }}</td>
+        <td class="px-4 py-3">{{ s.get_year_level_display }}</td>
+        <td class="px-4 py-3">
+          {% include 'students/_status_badge.html' with student=s %}
+        </td>
+        <td class="px-4 py-3">
+          <a
+            href="{% url 'students:edit' s.pk %}"
+            class="text-navy hover:underline"
+            >Edit</a
+          >
+          <span class="text-line">|</span>
+          <a
+            href="{% url 'students:delete' s.pk %}"
+            class="text-red-600 hover:underline"
+            >Delete</a
+          >
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="6" class="px-4 py-6 text-center text-muted">
+          No students found.
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

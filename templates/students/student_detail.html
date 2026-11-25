@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}{{ student.full_name }}{% endblock %}
+{% block content %}
+<a href="{% url 'students:list' %}" class="mb-4 inline-block text-sm font-medium text-navy hover:underline">&larr; Back to list</a>
+
+<section class="mb-4 flex flex-col items-center gap-5 rounded-xl border border-line bg-white/60 p-5 text-center sm:flex-row sm:text-left">
+  {% if student.photo %}
+    <img src="{{ student.photo.url }}" alt="{{ student.full_name }}" class="h-24 w-24 rounded-full object-cover">
+  {% else %}
+    <div class="flex h-24 w-24 items-center justify-center rounded-full bg-navy font-serif text-3xl font-bold text-white">
+      {{ student.first_name|slice:":1" }}{{ student.last_name|slice:":1" }}
+    </div>
+  {% endif %}
+  <div>
+    <h1 class="font-serif text-3xl font-bold">{{ student.full_name }}</h1>
+    <p class="mb-2 text-sm text-muted">{{ student.student_id }} &middot; {{ student.course }} &middot; {{ student.get_year_level_display }}</p>
+    {% include 'students/_status_badge.html' %}
+  </div>
+  <div class="flex gap-2 sm:ml-auto">
+    <a href="{% url 'students:edit' student.pk %}" class="rounded-lg border border-line bg-white/60 px-4 py-2 text-sm transition hover:bg-white">Edit</a>
+    <a href="{% url 'students:delete' student.pk %}" class="rounded-lg border border-red-200 px-4 py-2 text-sm text-red-700 transition hover:bg-red-50">Delete</a>
+    </div>
+</section>
+
+<section class="mb-4 rounded-xl border border-line bg-white/60 p-5">
+  <h2 class="mb-2 font-serif text-xl font-bold">Personal Information</h2>
+  <dl class="divide-y divide-line">
+    {% include 'students/_info_row.html' with label='Full Name' value=student.full_name %}
+    {% include 'students/_info_row.html' with label='Middle Name' value=student.middle_name %}
+    {% include 'students/_info_row.html' with label='Birth Date' value=student.birth_date|date:"F j, Y" %}
+    {% include 'students/_info_row.html' with label='Age' value=student.age %}
+    {% include 'students/_info_row.html' with label='Sex' value=student.get_sex_display %}
+    {% include 'students/_info_row.html' with label='Email' value=student.email %}
+    {% include 'students/_info_row.html' with label='Phone' value=student.phone %}
+    {% include 'students/_info_row.html' with label='Address' value=student.address %}
+  </dl>
+</section>
+
+<section class="mb-4 rounded-xl border border-line bg-white/60 p-5">
+  <h2 class="mb-2 font-serif text-xl font-bold">Background Information</h2>
+  {% if student.background %}
+  <dl class="divide-y divide-line">
+    {% include 'students/_info_row.html' with label='Last School Attended' value=student.background.last_school %}
+    {% include 'students/_info_row.html' with label='School Address' value=student.background.school_address %}
+    {% include 'students/_info_row.html' with label='Year Graduated' value=student.background.year_graduated %}
+    {% include 'students/_info_row.html' with label='Honors' value=student.background.honors %}
+  </dl>
+  {% else %}
+  <p class="text-sm text-muted">No background information yet.</p>
+  {% endif %}
+</section>
+
+<section class="mb-4 rounded-xl border border-line bg-white/60 p-5">
+  <h2 class="mb-2 font-serif text-xl font-bold">Guardian Information</h2>
+  {% if student.guardian %}
+  <dl class="divide-y divide-line">
+    {% include 'students/_info_row.html' with label='Name' value=student.guardian.name %}
+    {% include 'students/_info_row.html' with label='Relationship' value=student.guardian.relationship %}
+    {% include 'students/_info_row.html' with label='Contact Number' value=student.guardian.contact_number %}
+    {% include 'students/_info_row.html' with label='Occupation' value=student.guardian.occupation %}
+  </dl>
+  {% else %}
+  <p class="text-sm text-muted">No guardian information yet.</p>
+  {% endif %}
+</section>
+{% endblock %}
