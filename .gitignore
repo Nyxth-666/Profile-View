@@ -4,3 +4,4 @@ __pycache__/
 *.pyc
 static/css/output.css
 .env
+media/
