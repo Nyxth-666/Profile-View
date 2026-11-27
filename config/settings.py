@@ -2,6 +2,7 @@ from pathlib import Path
 from decouple import config, Csv
 import dj_database_url
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 
@@ -31,6 +32,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -53,7 +55,10 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
-    "default": dj_database_url.parse(config("DATABASE_URL"), conn_max_age=600)
+    "default": dj_database_url.config(
+        default=os.getenv("DATABASE_URL"),
+        conn_max_age=0,
+    )
 }
 
 AUTH_PASSWORD_VALIDATORS = [
