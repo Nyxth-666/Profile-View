@@ -4,7 +4,7 @@ from .models import Student
 from django.contrib import messages
 from django.db import transaction
 from django.shortcuts import redirect
-from .forms import StudentForm, GuardianForm, BackgroundForm
+from .forms import StudentForm, GuardianForm, BackgroundForm, PhotoForm
 
 
 def student_list(request):
@@ -77,3 +77,21 @@ def student_delete(request, pk):
         messages.success(request, f"{name} was deleted.")
         return redirect("students:list")
     return render(request, "students/student_confirm_delete.html", {"student": student})
+
+
+def student_photo(request, pk):
+    student = get_object_or_404(Student, pk=pk)
+
+    if request.method == "POST":
+        if "remove" in request.POST:
+            student.photo.delete(save=True)
+            messages.success(request, "Photo removed.")
+        else:
+            form = PhotoForm(request.POST, request.FILES, instance=student)
+            if form.is_valid():
+                form.save()
+                messages.success(request, "Photo updated.")
+            else:
+                messages.error(request, form.errors["photo"][0])
+
+    return redirect("students:detail", pk=pk)

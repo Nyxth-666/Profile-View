@@ -42,3 +42,15 @@ class BackgroundForm(StyledForm):
     class Meta:
         model = EducationalBackground
         fields = ["last_school", "school_address", "year_graduated", "honors"]
+
+
+class PhotoForm(forms.ModelForm):
+    class Meta:
+        model = Student
+        fields = ["photo"]
+
+    def clean_photo(self):
+        photo = self.cleaned_data.get("photo")
+        if photo and photo.size > 2 * 1024 * 1024:
+            raise forms.ValidationError("Photo must be 2 MB or smaller.")
+        return photo
