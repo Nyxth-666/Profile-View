@@ -20,7 +20,8 @@ class Student(models.Model):
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=20, blank=True)
     address = models.CharField(max_length=255, blank=True)
-    photo = models.ImageField(upload_to="students/", blank=True)  # needs Pillow
+    photo_data = models.BinaryField(null=True, blank=True, editable=False)
+    photo_type = models.CharField(max_length=50, blank=True)
 
     course = models.CharField(max_length=100)
     year_level = models.PositiveSmallIntegerField(choices=YEAR_CHOICES, default=1)

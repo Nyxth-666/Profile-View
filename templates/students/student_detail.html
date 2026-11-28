@@ -5,8 +5,8 @@
 
 <section class="mb-4 flex flex-col items-center gap-5 rounded-xl border border-line bg-white/60 p-5 text-center sm:flex-row sm:text-left">
   <div class="flex flex-col items-center gap-2">
-    {% if student.photo %}
-      <img src="{{ student.photo.url }}" alt="{{ student.full_name }}" class="h-24 w-24 rounded-full object-cover">
+    {% if student.photo_type %}
+      <img src="{% url 'students:photo_file' student.pk %}" alt="{{ student.full_name }}" class="h-24 w-24 rounded-full object-cover">
     {% else %}
       <div class="flex h-24 w-24 items-center justify-center rounded-full bg-navy font-serif text-3xl font-bold text-white">
         {{ student.first_name|slice:":1" }}{{ student.last_name|slice:":1" }}
@@ -16,12 +16,12 @@
     <form method="post" action="{% url 'students:photo' student.pk %}" enctype="multipart/form-data">
       {% csrf_token %}
       <label class="cursor-pointer text-xs font-medium text-navy hover:underline">
-        {% if student.photo %}Change photo{% else %}Upload photo{% endif %}
+        {% if student.photo_type %}Change photo{% else %}Upload photo{% endif %}
         <input type="file" name="photo" accept="image/*" class="hidden" onchange="this.form.submit()">
       </label>
     </form>
 
-    {% if student.photo %}
+    {% if student.photo_type %}
     <form method="post" action="{% url 'students:photo' student.pk %}">
       {% csrf_token %}
       <button type="submit" name="remove" value="1" class="text-xs text-muted hover:text-red-600">Remove</button>
